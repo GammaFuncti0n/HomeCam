@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 import logging
 
-user_logger = logging.getLogger("user_requests")
+#user_logger = logging.getLogger("bot")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     '''
@@ -18,16 +18,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "для 5 секундного видео отправь /video"
         )
         await update.message.reply_text(text)
-        user_logger.info(
-            text, 
-            extra={
-                "user_id": user.id,
-                "username": user.username
-            })
+        logging.info(f"{user.id} | {user.username} | {text}")
     else:
-        user_logger.info(
-            "WARNING: Unknown user", 
-            extra={
-                "user_id": user.id,
-                "username": user.username
-            })
+        logging.warning(f"{user.id} | {user.username} | WARNING: Unknown user")

@@ -2,6 +2,14 @@ import subprocess
 from fastapi import FastAPI
 from datetime import datetime
 from pathlib import Path
+import logging
+import sys
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler("camera.log", encoding="utf-8")]
+)
 
 app = FastAPI()
 
@@ -13,6 +21,7 @@ DEVICE = "/dev/video0"  # USB cam (или /dev/video10 для CSI через v4l
 @app.get("/sanity_check")
 def check_available():
     '''Check if service is available'''
+    logging.info("Check status")
     return {"status": "available"}
 
 @app.post("/snapshot")
@@ -20,7 +29,7 @@ def snapshot():
     '''
     Method for take one snapshot and save it in filename
     '''
-    filename = OUT_DIR / f"frame_{datetime.utcnow().isoformat()}.jpg"
+    filename = OUT_DIR / f"snapshot_{datetime.utcnow().isoformat()}.jpg"
 
     cmd = [
         "ffmpeg",
@@ -34,6 +43,7 @@ def snapshot():
 
     subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+    logging.info(f"Take snapshot: {filename} with size {format_size(Path(filename).stat().st_size)}")
     return {
         "file": str(filename),
         "exists": filename.exists()
@@ -71,8 +81,19 @@ def record_video(duration: int = 5):
 
     subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+    logging.info(f"Take video: {filename} with size {format_size(Path(filename).stat().st_size)}")
     return {
         "file": str(filename),
         "duration": duration,
         "exists": filename.exists()
     }
+
+def format_size(size_bytes: int) -> str:
+    if size_bytes < 1024:
+        return f"{size_bytes} B"
+    elif size_bytes < 1024 ** 2:
+        return f"{size_bytes / 1024:.2f} KB"
+    elif size_bytes < 1024 ** 3:
+        return f"{size_bytes / (1024 ** 2):.2f} MB"
+    else:
+        return f"{size_bytes / (1024 ** 3):.2f} GB"

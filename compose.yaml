@@ -46,9 +46,10 @@ services:
       - homecam_net
 
     volumes:
+      - ./services/bot_service:/app
       - ./data:/data
       - ./auth.yaml:/app/auth.yaml
-      - ./log:/app/log
+      #- ./log:/app/log
     
     depends_on:
       - camera_service

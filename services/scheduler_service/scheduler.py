@@ -1,25 +1,30 @@
 import time
 import requests
 from datetime import datetime
+import logging
+import sys
 
-CAMERA_URL = "http://camera_service:8000/snapshot"
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler("scheduler.log", encoding="utf-8")]
+)
 
-INTERVAL_SECONDS = 60 * 60  # раз в 10 секунд
-
+INTERVAL_SECONDS = 60 * 60  # раз в 1 час
 
 def take_snapshot():
     try:
-        resp = requests.post(CAMERA_URL, timeout=30)
+        resp = requests.post("http://camera_service:8000/snapshot", timeout=10)
         data = resp.json()
 
-        print(f"[{datetime.utcnow().isoformat()}] snapshot:", data)
+        logging.info(f"Take snapshot:", data)
 
     except Exception as e:
-        print(f"ERROR: Snapshot failed: {e}")
+        logging.error(f"ERROR: Snapshot failed: {e}")
 
 
 def main():
-    print("Scheduler started")
+    logging.info("Scheduler started")
 
     while True:
         take_snapshot()
