@@ -1,23 +1,10 @@
 FROM python:3.12-slim
 
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    build-essential \
-    git \
-    tmux \
-    curl \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /workspace
+WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8888
+COPY scheduler.py .
 
-ENV HTTP_PROXY="socks5://127.0.0.1:1080"
-ENV HTTPS_PROXY="socks5://127.0.0.1:1080"
-
-CMD ["bash"]
+CMD ["python", "scheduler.py"]

@@ -1,9 +1,18 @@
-Проект домашней камеры которая делай снимки и видео по запросу.
+# Scheduler Service
 
-Докер билд:
+Сервис для шкедулера.
 
-docker build -t home_cam .
+До compose запуск происходит так:
 
-Докер ран:
 
-docker run -d -it --name home_cam --device=/dev/video0:/dev/video0 --restart unless-stopped --env-file .env --network host -v $(pwd):/workspace home_cam
+## Docker Build
+
+```bash
+docker build -t scheduler_service .
+```
+
+## Docker Run
+
+```bash
+docker run -d -it --name scheduler_service --network homecam_net -v $(pwd):/app scheduler_service
+```
