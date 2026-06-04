@@ -26,6 +26,7 @@ def snapshot():
         "ffmpeg",
         "-y",
         "-f", "v4l2",
+        "-video_size", "1280x720", #"1280x720" "1920x1080"
         "-i", DEVICE,
         "-frames:v", "5",
         str(filename)
@@ -61,6 +62,9 @@ def record_video(duration: int = 5):
 
         # encoding
         "-c:v", "libx264",
+        "-profile:v", "main",
+        "-pix_fmt", "yuv420p",
+        "-movflags", "+faststart",
 
         str(filename)
     ]

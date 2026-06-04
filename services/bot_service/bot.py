@@ -3,7 +3,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandle
 from telegram.request import HTTPXRequest
 
 from src.utils import setup_loggers
-from src.handlers import start, snapshot
+from src.handlers import start, snapshot, video
 import os
 
 setup_loggers('log')
@@ -17,6 +17,7 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("snapshot", snapshot))
+    app.add_handler(CommandHandler("video", video))
 
     app.run_polling()
 
