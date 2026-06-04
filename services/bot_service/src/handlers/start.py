@@ -13,8 +13,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if str(user.id) in allowed_users:
         text = (
             "Привет! Я бот, который делает снимок квартиры\n" \
-            "для информации отправь `/start`\n"
-            "для снимка отправь `/snapshot`\n"
+            "для информации отправь /start\n" \
+            "для снимка отправь /snapshot\n" \
+            "для 5 секундного видео отправь /video"
         )
         await update.message.reply_text(text)
         user_logger.info(
