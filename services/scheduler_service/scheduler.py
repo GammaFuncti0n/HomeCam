@@ -4,7 +4,7 @@ from datetime import datetime
 
 CAMERA_URL = "http://camera_service:8000/snapshot"
 
-INTERVAL_SECONDS = 10  # раз в 10 секунд
+INTERVAL_SECONDS = 60 * 60  # раз в 10 секунд
 
 
 def take_snapshot():

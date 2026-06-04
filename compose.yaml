@@ -32,7 +32,29 @@ services:
 
     networks:
       - homecam_net
+  
+  bot:
+    build: ./services/bot_service
+    container_name: tg-bot
+    restart: unless-stopped
+    env_file: .env
+    dns:
+      - 127.0.0.11
+    dns_search: []
 
+    networks:
+      - homecam_net
+
+    volumes:
+      - ./data:/data
+      - ./auth.yaml:/app/auth.yaml
+      - ./log:/log
+    
+    depends_on:
+      - camera_service
+    
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 networks:
   homecam_net:
