@@ -1,0 +1,74 @@
+import subprocess
+from fastapi import FastAPI
+from datetime import datetime
+from pathlib import Path
+
+app = FastAPI()
+
+OUT_DIR = Path("/data")
+OUT_DIR.mkdir(exist_ok=True)
+
+DEVICE = "/dev/video0"  # USB cam (или /dev/video10 для CSI через v4l2loopback)
+
+@app.get("/sanity_check")
+def check_available():
+    '''Check if service is available'''
+    return {"status": "available"}
+
+@app.post("/snapshot")
+def snapshot():
+    '''
+    Method for take one snapshot and save it in filename
+    '''
+    filename = OUT_DIR / f"frame_{datetime.utcnow().isoformat()}.jpg"
+
+    cmd = [
+        "ffmpeg",
+        "-y",
+        "-f", "v4l2",
+        "-i", DEVICE,
+        "-frames:v", "5",
+        str(filename)
+    ]
+
+    subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    return {
+        "file": str(filename),
+        "exists": filename.exists()
+    }
+
+@app.post("/video")
+def record_video(duration: int = 5):
+    '''
+    Method for record video with selected duration (default 5 sec)
+    '''
+    filename = OUT_DIR / f"video_{datetime.utcnow().isoformat()}.mp4"
+
+    cmd = [
+        "ffmpeg",
+        "-y",
+
+        # input
+        "-f", "v4l2",
+        "-input_format", "mjpeg",
+        "-video_size", "960x540",
+        "-framerate", "30",
+        "-i", DEVICE,
+
+        # duration
+        "-t", str(duration),
+
+        # encoding
+        "-c:v", "libx264",
+
+        str(filename)
+    ]
+
+    subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    return {
+        "file": str(filename),
+        "duration": duration,
+        "exists": filename.exists()
+    }

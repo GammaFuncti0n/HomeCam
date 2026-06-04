@@ -1,9 +1,8 @@
 __pycache__
 .env
 auth.yaml
-*log*
-*data*
 *.mp4
 *.jpg
 *.jpeg
 *.png
+*.log
