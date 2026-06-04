@@ -1,18 +1,15 @@
-# Scheduler Service
+# Home Cam Project
 
-Сервис для шкедулера.
+Проект для установки камеры в квартире.
 
-До compose запуск происходит так:
-
-
-## Docker Build
+# Quick Start
 
 ```bash
-docker build -t scheduler_service .
+docker compose up -d --build
 ```
 
-## Docker Run
+Чтобы остановить:
 
 ```bash
-docker run -d -it --name scheduler_service --network homecam_net -v $(pwd):/app scheduler_service
+docker compose stop
 ```

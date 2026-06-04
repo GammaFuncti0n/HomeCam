@@ -1,0 +1,39 @@
+version: "1.0"
+
+services:
+  camera_service:
+    build: ./services/camera_service
+    container_name: camera_service
+    restart: unless-stopped
+
+    ports:
+      - "8000:8000"
+
+    devices:
+      - /dev/video0:/dev/video0
+
+    volumes:
+      - ./services/camera_service:/app
+      - ./data:/data
+
+    networks:
+      - homecam_net
+
+  scheduler:
+    build: ./services/scheduler_service
+    container_name: scheduler
+    restart: unless-stopped
+
+    volumes:
+      - ./services/scheduler_service:/app
+
+    depends_on:
+      - camera_service
+
+    networks:
+      - homecam_net
+
+
+networks:
+  homecam_net:
+    driver: bridge

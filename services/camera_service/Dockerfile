@@ -14,4 +14,4 @@ COPY camera.py .
 
 RUN mkdir -p /data
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "camera:app", "--host", "0.0.0.0", "--port", "8000"]
