@@ -48,7 +48,7 @@ services:
     volumes:
       - ./data:/data
       - ./auth.yaml:/app/auth.yaml
-      - ./log:/log
+      - ./log:/app/log
     
     depends_on:
       - camera_service
