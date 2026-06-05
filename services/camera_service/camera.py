@@ -1,5 +1,6 @@
 import subprocess
 from fastapi import FastAPI
+import time
 from datetime import datetime
 from pathlib import Path
 import logging
@@ -29,7 +30,7 @@ def snapshot():
     '''
     Method for take one snapshot and save it in filename
     '''
-    filename = OUT_DIR / f"snapshot_{datetime.utcnow().isoformat()}.jpg"
+    filename = OUT_DIR / f"snapshot_{time.strftime("%Y%m%d_%H%M%S")}.jpg"
 
     cmd = [
         "ffmpeg",
@@ -54,7 +55,7 @@ def record_video(duration: int = 5):
     '''
     Method for record video with selected duration (default 5 sec)
     '''
-    filename = OUT_DIR / f"video_{datetime.utcnow().isoformat()}.mp4"
+    filename = OUT_DIR / f"video_{time.strftime("%Y%m%d_%H%M%S")}.mp4"
 
     cmd = [
         "ffmpeg",

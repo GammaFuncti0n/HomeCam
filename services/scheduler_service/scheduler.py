@@ -10,14 +10,14 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler("scheduler.log", encoding="utf-8")]
 )
 
-INTERVAL_SECONDS = 60 * 60  # раз в 1 час
+INTERVAL_SECONDS = 3 * 60 * 60  # раз в 3 часа
 
 def take_snapshot():
     try:
         resp = requests.post("http://camera_service:8000/snapshot", timeout=10)
         data = resp.json()
 
-        logging.info(f"Take snapshot:", data)
+        logging.info(f"Take snapshot: {data}")
 
     except Exception as e:
         logging.error(f"ERROR: Snapshot failed: {e}")

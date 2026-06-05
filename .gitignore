@@ -6,3 +6,4 @@ auth.yaml
 *.jpeg
 *.png
 *.log
+uploaded_hashes.txt

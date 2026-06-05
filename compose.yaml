@@ -32,6 +32,22 @@ services:
 
     networks:
       - homecam_net
+
+  database:
+    build: ./services/database_service
+    container_name: database
+    restart: unless-stopped
+    env_file: ./services/database_service/.env
+
+    environment:
+      - YANDEX_FOLDER=/homecam
+
+    volumes:
+      - ./services/database_service:/app
+      - ./data:/data
+
+    networks:
+      - homecam_net
   
   bot:
     build: ./services/bot_service
