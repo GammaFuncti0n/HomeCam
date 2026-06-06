@@ -10,7 +10,7 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler("scheduler.log", encoding="utf-8")]
 )
 
-INTERVAL_SECONDS = 3 * 60 * 60  # раз в 3 часа
+INTERVAL_SECONDS = 60 * 90 # раз в 1.5 часа
 
 def take_snapshot():
     try:

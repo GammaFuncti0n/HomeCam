@@ -152,8 +152,9 @@ def sanitize_filename(name: str) -> str:
 
 # ---------------- SCHEDULER ----------------
 
-# schedule.every(10).minutes.do(upload_new_files)
-schedule.every().hour.do(upload_new_files)
+schedule.every(60).minutes.do(upload_new_files)
+# schedule.every(1).hour.do(upload_new_files)
+# schedule.every(30).seconds.do(upload_new_files)
 
 if __name__ == "__main__":
     logging.info("Yandex Disk uploader started")
