@@ -1,0 +1,78 @@
+version: "1.0"
+
+services:
+  camera_service:
+    build: ./services/camera_service
+    container_name: camera_service
+    restart: unless-stopped
+
+    ports:
+      - "8000:8000"
+
+    devices:
+      - /dev/video0:/dev/video0
+
+    volumes:
+      - ./services/camera_service:/app
+      - ./data:/data
+
+    networks:
+      - homecam_net
+
+  scheduler:
+    build: ./services/scheduler_service
+    container_name: scheduler
+    restart: unless-stopped
+
+    volumes:
+      - ./services/scheduler_service:/app
+
+    depends_on:
+      - camera_service
+
+    networks:
+      - homecam_net
+
+  database:
+    build: ./services/database_service
+    container_name: database
+    restart: unless-stopped
+    env_file: ./services/database_service/.env
+
+    environment:
+      - YANDEX_FOLDER=/homecam
+
+    volumes:
+      - ./services/database_service:/app
+      - ./data:/data
+
+    networks:
+      - homecam_net
+  
+  bot:
+    build: ./services/bot_service
+    container_name: tg-bot
+    restart: unless-stopped
+    env_file: .env
+    dns:
+      - 127.0.0.11
+    dns_search: []
+
+    networks:
+      - homecam_net
+
+    volumes:
+      - ./services/bot_service:/app
+      - ./data:/data
+      - ./auth.yaml:/app/auth.yaml
+      #- ./log:/app/log
+    
+    depends_on:
+      - camera_service
+    
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  homecam_net:
+    driver: bridge

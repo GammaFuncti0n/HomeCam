@@ -6,10 +6,10 @@ def setup_loggers(log_path='/log') -> None:
     user logger
     '''
     os.makedirs(log_path, exist_ok=True)
-    user_logger = logging.getLogger("user_requests")
+    user_logger = logging.getLogger("bot")
     user_logger.setLevel(logging.INFO)
 
-    file_handler = logging.FileHandler(os.path.join(log_path, "user_requests.log"), encoding="utf-8")
+    file_handler = logging.FileHandler(os.path.join(log_path, "bot.log"), encoding="utf-8")
     file_handler.setFormatter(logging.Formatter("%(asctime)s | user_id=%(user_id)s | username=%(username)s | %(message)s"))
 
     user_logger.addHandler(file_handler)
